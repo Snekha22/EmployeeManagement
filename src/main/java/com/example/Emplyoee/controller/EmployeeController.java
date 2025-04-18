@@ -1,68 +1,60 @@
 package com.example.Emplyoee.controller;
 
-//controller/EmployeeController.java
 
-import jakarta.validation.Valid;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
 
 import com.example.Emplyoee.entity.Employee;
 import com.example.Emplyoee.service.EmployeeService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/employees")
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/employees")
 public class EmployeeController {
 
- private final EmployeeService service;
+    @Autowired
+    private EmployeeService employeeService;
 
- public EmployeeController(EmployeeService service) {
-     this.service = service;
- }
+    @GetMapping
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
+    }
 
- @GetMapping
- public String listEmployees(Model model) {
-     model.addAttribute("employees", service.getAllEmployees());
-     return "employee_list";
- }
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+        Optional<Employee> employee = employeeService.getEmployeeById(id);
+        return employee.map(ResponseEntity::ok)
+                       .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
- @GetMapping("/new")
- public String showCreateForm(Model model) {
-     model.addAttribute("employee", new Employee());
-     return "employee_form";
- }
+    @PostMapping
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
+        Employee savedEmployee = employeeService.saveEmployee(employee);
+        return ResponseEntity.ok(savedEmployee);
+    }
 
- @PostMapping
- public String saveEmployee(@Valid @ModelAttribute Employee employee, BindingResult result) {
-     if (result.hasErrors()) return "employee_form";
-     service.saveEmployee(employee);
-     return "redirect:/employees";
- }
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @Valid @RequestBody Employee employee) {
+        Optional<Employee> existingEmployee = employeeService.getEmployeeById(id);
+        if (existingEmployee.isPresent()) {
+            employee.setId(id);
+            Employee updatedEmployee = employeeService.saveEmployee(employee);
+            return ResponseEntity.ok(updatedEmployee);
+        }
+        return ResponseEntity.notFound().build();
+    }
 
- @GetMapping("/edit/{id}")
- public String showEditForm(@PathVariable Long id, Model model) {
-     model.addAttribute("employee", service.getEmployeeById(id).orElseThrow());
-     return "employee_form";
- }
-
- @PostMapping("/update/{id}")
- public String updateEmployee(@PathVariable Long id, @Valid @ModelAttribute Employee employee, BindingResult result) {
-     if (result.hasErrors()) return "employee_form";
-     employee.setId(id);
-     service.saveEmployee(employee);
-     return "redirect:/employees";
- }
-
- @GetMapping("/delete/{id}")
- public String deleteEmployee(@PathVariable Long id) {
-     service.deleteEmployee(id);
-     return "redirect:/employees";
- }
-
- @GetMapping("/view/{id}")
- public String viewEmployee(@PathVariable Long id, Model model) {
-     model.addAttribute("employee", service.getEmployeeById(id).orElseThrow());
-     return "employee_view";
- }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+        Optional<Employee> employee = employeeService.getEmployeeById(id);
+        if (employee.isPresent()) {
+            employeeService.deleteEmployee(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

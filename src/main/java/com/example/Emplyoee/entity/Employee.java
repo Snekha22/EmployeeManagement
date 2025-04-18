@@ -1,80 +1,62 @@
 package com.example.Emplyoee.entity;
 
-//model/Employee.java
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 @Entity
+@Table(name = "employees")
 public class Employee {
- @Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
- private Long id;
 
- @NotBlank(message = "Name is mandatory")
- private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
- @Email(message = "Email should be valid")
- private String email;
+    @NotBlank(message = "First name is required")
+    @Size(max = 50, message = "First name cannot exceed 50 characters")
+    @Column(name = "first_name")
+    private String firstName;
 
- @NotBlank(message = "Department is required")
- private String department;
+    @NotBlank(message = "Last name is required")
+    @Size(max = 50, message = "Last name cannot exceed 50 characters")
+    @Column(name = "last_name")
+    private String lastName;
 
-/**
- * @return the id
- */
-public Long getId() {
-	return id;
-}
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be valid")
+    @Column(name = "email")
+    private String email;
 
-/**
- * @param id the id to set
- */
-public void setId(Long id) {
-	this.id = id;
-}
+    @NotBlank(message = "Department is required")
+    @Size(max = 100, message = "Department cannot exceed 100 characters")
+    @Column(name = "department")
+    private String department;
 
-/**
- * @return the name
- */
-public String getName() {
-	return name;
-}
+    public Employee() {}
 
-/**
- * @param name the name to set
- */
-public void setName(String name) {
-	this.name = name;
-}
+    public Employee(Long id, String firstName, String lastName, String email, String department) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.department = department;
+    }
 
-/**
- * @return the email
- */
-public String getEmail() {
-	return email;
-}
+    public Long getId() { return id; }
+    public void setId(Long id)
+    {
+    	this.id = id;
+    	
+    }
 
-/**
- * @param email the email to set
- */
-public void setEmail(String email) {
-	this.email = email;
-}
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-/**
- * @return the department
- */
-public String getDepartment() {
-	return department;
-}
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-/**
- * @param department the department to set
- */
-public void setDepartment(String department) {
-	this.department = department;
-}
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
- // Getters and Setters
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
 }
