@@ -1,4 +1,4 @@
-## Employee Management Application Documentation
+## 🧑‍💼 Employee Management Application Documentation
 
 ## Project Overview
 
@@ -95,6 +95,22 @@ mvn spring-boot:run
 ![image](https://github.com/user-attachments/assets/d1520c72-9cb9-4508-93f8-673774241f54)
 
 ---
+
+![image](https://github.com/user-attachments/assets/552a3df5-3cd2-452b-bd52-792277c39a0e)
+
+---
+![image](https://github.com/user-attachments/assets/50b2562a-2f1a-42ce-a812-4ed665159e0d)
+
+---
+![image](https://github.com/user-attachments/assets/fccc4899-032e-4d93-acb8-8e241dc21197)
+
+---
+![image](https://github.com/user-attachments/assets/8f91f1ea-32c4-4346-a617-4c8d13ee1945)
+
+---
+
+
+
 
 
 
